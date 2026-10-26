@@ -7,15 +7,14 @@
 #
 # Usage:
 #   ./scripts/vendor-qgds.sh                 # version from _config.yml, via npm
-#   ./scripts/vendor-qgds.sh 0.3.4           # explicit npm version
+#   ./scripts/vendor-qgds.sh 0.4.0           # explicit npm version
 #   ./scripts/vendor-qgds.sh --from-source   # build from the repo's main branch
 #   ./scripts/vendor-qgds.sh --from-source v1.2.3   # build from a tag/branch
 #
-# --from-source exists because the published npm releases lag the repository.
-# <qgds-navigation-item>, which this site's navigation uses, is not in 0.3.4 —
-# the newest release at the time of writing. Building from source is the only
-# way to get it until the next publish. Once it is published, prefer a pinned
-# npm version: a source build is a moving target and is not reproducible.
+# --from-source is for trying changes that are not yet published to npm.
+# Otherwise prefer a pinned npm version: a source build is a moving target and
+# is not reproducible. The site's navigation needs 0.3.5 or later, the first
+# release with <qgds-navigation-item>.
 
 set -euo pipefail
 

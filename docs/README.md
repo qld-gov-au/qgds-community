@@ -12,17 +12,20 @@ with front matter, nothing else.
 
 ```bash
 bundle install
+./scripts/vendor-qgds.sh   # once, and again after changing qgds.version
 bundle exec jekyll serve --livereload
 # http://127.0.0.1:4000
 ```
 
-Ruby 3.1+ is required.
+Ruby 3.1+ is required. `vendor-qgds.sh` needs npm: it downloads the pinned
+release of the component library into `assets/vendor/qgds` (see "Loading the
+components").
 
 ## Deploy to GitHub Pages
 
 1. Push to `main`.
 2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
-3. `.github/workflows/jekyll.yml` builds and deploys on every push. It passes the
+3. `.github/workflows/jekyll-gh-pages.yml` builds and deploys on every push. It passes the
    correct `--baseurl` automatically, so a project site at
    `https://<org>.github.io/<repo>/` works with no config change.
 
@@ -124,19 +127,27 @@ The markup is rendered live and shown as copyable source below it.
 The library is **ESM only** — there is no UMD build, so a plain `<script src>`
 will not register the custom elements. It must be `type="module"`.
 
-`_config.yml` switches between two sources:
+`_config.yml` switches between three sources:
 
 ```yaml
 qgds:
-  version: "0.3.4"
-  source: cdn      # cdn | local
+  version: "0.4.0"
+  source: local    # local | cdn | source
 ```
 
-- **`cdn`** (default) loads the CSS and ESM bundle from jsDelivr. Nothing to
-  install, nothing vendored into the repo.
-- **`local`** loads from `assets/vendor/qgds`. Run `./scripts/vendor-qgds.sh`
-  first to copy the npm dist in. Use this to pin the site to an exact build and
-  remove the CDN dependency.
+- **`local`** (default) self-hosts the library: it loads from
+  `assets/vendor/qgds`, served from the same origin as the site. The deploy
+  workflow runs `./scripts/vendor-qgds.sh`, which downloads the pinned npm
+  `version` (unpack only — no install scripts run). Run it yourself once for
+  local preview. The vendored files are git-ignored, not committed.
+- **`cdn`** loads the CSS and ESM bundle from jsDelivr. Nothing to install, but
+  it puts a third-party CDN outside Queensland Government control in the page
+  load. Avoid it for anything public.
+- **`source`** has the deploy workflow build the library from `source_ref` and
+  vendor it. Use this only to try changes that are not yet published to npm.
+
+The navigation needs 0.3.5 or later — earlier releases do not include
+`<qgds-navigation-item>`, and the nav renders empty.
 
 The library is pre-release. Pin an exact version and read the release notes
 before upgrading.
