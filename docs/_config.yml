@@ -25,15 +25,18 @@ source_dir: "docs"
 # ---------------------------------------------------------------------------
 # QGDS web components
 # ---------------------------------------------------------------------------
-# source: cdn    -> jsDelivr (npm). Simplest: nothing to install or commit.
-# source: local  -> assets/vendor/qgds, committed. Run scripts/vendor-qgds.sh.
+# source: local  -> self-hosted from assets/vendor/qgds, served with the site.
+#                   The deploy workflow copies in the pinned npm `version`;
+#                   locally, run scripts/vendor-qgds.sh once. Not committed.
+# source: cdn    -> jsDelivr, a third-party CDN outside Queensland Government
+#                   control. Avoid for anything public.
 # source: source -> the workflow builds the library from `source_ref` at deploy
 #                   time and vendors it. Only needed for unreleased changes.
 # The navigation uses <qgds-navigation-item>, which needs 0.3.5 or later.
 # Against an older version the nav renders empty.
 qgds:
   version: "0.4.0"
-  source: cdn
+  source: local
   # Branch or tag to build when `source: source`
   source_ref: main
   cdn_base: "https://cdn.jsdelivr.net/npm/@qld-gov-au/qgds-web-components"
